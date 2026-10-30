@@ -152,4 +152,87 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎬 Cartoon AI Studio</h1>
+        <div class="tagline">Create Stories. Bring Characters to Life.</div>
+
+        <div class="section-title">Select Format:</div>
+        <div class="formats">
+            <button class="format-btn active" onclick="setFormat(1024, 1024, this)">1:1 Square</button>
+            <button class="format-btn" onclick="setFormat(1280, 720, this)">16:9 Landscape</button>
+            <button class="format-btn" onclick="setFormat(720, 1280, this)">9:16 Story/Reels</button>
+        </div>
+
+        <div class="section-title">Enter Prompt (Any Language):</div>
+        <textarea id="promptInput" placeholder="Jaise: 3D cute cartoon cat flying in space, vibrant colors, cinematic lighting..."></textarea>
+        
+        <button class="generate-btn" onclick="generateArt()">Generate Cartoon Art</button>
+
+        <div class="result-box" id="resultBox">
+            <div class="loader" id="loader"></div>
+            <span id="placeholderText" style="color: #64748b;">Aapka creation yahan dikhega...</span>
+            <a id="downloadBtn" class="download-btn" target="_blank">📥 Download Creation</a>
+        </div>
+    </div>
+
+    <script>
+        let imgWidth = 1024;
+        let imgHeight = 1024;
+
+        function setFormat(w, h, btn) {
+            imgWidth = w;
+            imgHeight = h;
+            document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        async function generateArt() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            const resultBox = document.getElementById('resultBox');
+            const loader = document.getElementById('loader');
+            const placeholderText = document.getElementById('placeholderText');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            if (!prompt) {
+                alert('Kripya pehle kuch prompt likhein!');
+                return;
+            }
+
+            placeholderText.style.display = 'none';
+            downloadBtn.style.display = 'none';
+            const oldImg = resultBox.querySelector('img');
+            if(oldImg) oldImg.remove();
             
+            loader.style.display = 'block';
+
+            const randomSeed = Math.floor(Math.random() * 999999);
+            const encodedPrompt = encodeURIComponent("3d cartoon style " + prompt);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?seed=${randomSeed}&width=${imgWidth}&height=${imgHeight}&nologo=true`;
+
+            const img = new Image();
+            img.src = imageUrl;
+
+            img.onload = function() {
+                loader.style.display = 'none';
+                resultBox.insertBefore(img, downloadBtn);
+                
+                downloadBtn.href = imageUrl;
+                downloadBtn.style.display = 'inline-block';
+            };
+
+            img.onerror = function() {
+                loader.style.display = 'none';
+                placeholderText.innerText = "Server busy hai, please 5 second baad dobara koshish karein.";
+                placeholderText.style.display = 'block';
+            };
+        }
+    </script>
+</body>
+</html>
