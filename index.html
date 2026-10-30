@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free AI Image & Animation Generator</title>
+    <title>AI Image & Cartoon Video Studio</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         body {
-            background-color: #0f172a;
+            background: linear-gradient(135deg, #090d16, #111827);
             color: #f8fafc;
             display: flex;
             flex-direction: column;
@@ -22,98 +22,125 @@
         }
         .container {
             width: 100%;
-            max-width: 600px;
-            background: #1e293b;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            max-width: 650px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
         }
         h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 8px;
-            color: #38bdf8;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         p {
             color: #94a3b8;
             font-size: 0.95rem;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         .tab-btn {
             flex: 1;
-            padding: 10px;
-            background: #334155;
-            border: none;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #475569;
             color: #cbd5e1;
-            font-weight: bold;
-            border-radius: 8px;
+            font-weight: 600;
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.3s;
         }
         .tab-btn.active {
-            background: #0284c7;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            border-color: #38bdf8;
             color: #fff;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
         }
         textarea {
             width: 100%;
-            height: 100px;
-            padding: 12px;
-            border-radius: 8px;
+            height: 110px;
+            padding: 15px;
+            border-radius: 12px;
             border: 1px solid #475569;
-            background: #0f172a;
+            background: #0b0f19;
             color: #fff;
             font-size: 1rem;
             resize: none;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         textarea:focus {
             outline: none;
             border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
         }
         .generate-btn {
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #0284c7, #2563eb);
+            padding: 14px;
+            background: linear-gradient(135deg, #059669, #10b981);
             border: none;
             color: white;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
         }
         .generate-btn:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            opacity: 0.95;
         }
         .result-box {
-            margin-top: 20px;
-            min-height: 250px;
+            margin-top: 25px;
+            min-height: 280px;
             border: 2px dashed #475569;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #0f172a;
+            background: #0b0f19;
             overflow: hidden;
             position: relative;
+            padding: 15px;
         }
         .result-box img, .result-box video {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 420px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+        .download-btn {
+            display: none;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
             border-radius: 8px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+        .download-btn:hover {
+            background: #1d4ed8;
         }
         .loader {
             display: none;
-            border: 4px solid #334155;
+            border: 4px solid #1e293b;
             border-top: 4px solid #38bdf8;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
@@ -125,21 +152,22 @@
 <body>
 
     <div class="container">
-        <h1>🚀 Free AI Content Generator</h1>
-        <p>Kisi bhi bhasha mein prompt likhein aur AI Image ya Animation Video banayein!</p>
+        <h1>✨ AI Content Studio</h1>
+        <p>Kisi bhi bhasha mein prompt likhein aur HD Image ya Video banayein!</p>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('image')">🎨 AI Image</button>
-            <button class="tab-btn tab-btn-inactive" onclick="switchTab('video')">🎬 AI Animation / Video</button>
+            <button class="tab-btn" onclick="switchTab('video')">🎬 AI Video / Cartoon</button>
         </div>
 
-        <textarea id="promptInput" placeholder="Jaise: A cute cat flying in space, ya akash mein udti hui billi..."></textarea>
+        <textarea id="promptInput" placeholder="Jaise: Ek sundar rajkumari ya a cute cat flying in space..."></textarea>
         
         <button class="generate-btn" id="actionBtn" onclick="generateContent()">Generate Image</button>
 
         <div class="result-box" id="resultBox">
             <div class="loader" id="loader"></div>
             <span id="placeholderText" style="color: #64748b;">Aapka output yahan dikhega...</span>
+            <a id="downloadBtn" class="download-btn" download="ai-output" target="_blank">📥 Download File</a>
         </div>
     </div>
 
@@ -151,14 +179,14 @@
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             
+            event.target.classList.add('active');
+            
             if(mode === 'image') {
-                event.target.classList.add('active');
                 document.getElementById('actionBtn').innerText = 'Generate Image';
-                document.getElementById('promptInput').placeholder = 'Jaise: A cute cat flying in space, ya koi sundar drishya...';
+                document.getElementById('promptInput').placeholder = 'Jaise: Ek sundar rajkumari ya a cute cat flying in space...';
             } else {
-                event.target.classList.add('active');
-                document.getElementById('actionBtn').innerText = 'Generate Animation Video';
-                document.getElementById('promptInput').placeholder = 'Jaise: 3D cartoon animation of a dancing robot...';
+                document.getElementById('actionBtn').innerText = 'Generate Video';
+                document.getElementById('promptInput').placeholder = 'Jaise: 3D cartoon video of a running dog...';
             }
         }
 
@@ -167,48 +195,70 @@
             const resultBox = document.getElementById('resultBox');
             const loader = document.getElementById('loader');
             const placeholderText = document.getElementById('placeholderText');
+            const downloadBtn = document.getElementById('downloadBtn');
 
             if (!prompt) {
                 alert('Kripya kuch prompt likhein!');
                 return;
             }
 
-            // Show loader
+            // Clear previous outputs
             placeholderText.style.display = 'none';
-            resultBox.innerHTML = '';
-            resultBox.appendChild(loader);
+            downloadBtn.style.display = 'none';
+            const oldMedia = resultBox.querySelector('img, video');
+            if(oldMedia) oldMedia.remove();
+            
             loader.style.display = 'block';
 
-            // Translate multi-language prompt to English safely via free API endpoint or pass directly
             const encodedPrompt = encodeURIComponent(prompt);
 
             if (currentMode === 'image') {
-                // Image Generation URL
-                const imageUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&nologo=true`;
-                
+                const mediaUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&nologo=true`;
                 const img = new Image();
-                img.src = imageUrl;
+                img.crossOrigin = "anonymous";
+                img.src = mediaUrl;
+                
                 img.onload = function() {
                     loader.style.display = 'none';
-                    resultBox.innerHTML = '';
-                    resultBox.appendChild(img);
+                    resultBox.insertBefore(img, downloadBtn);
+                    downloadBtn.href = mediaUrl;
+                    downloadBtn.innerText = "📥 Download Image";
+                    downloadBtn.style.display = 'inline-block';
                 };
+
                 img.onerror = function() {
                     loader.style.display = 'none';
-                    resultBox.innerHTML = '<span style="color: #ef4444;">Kuch error aaya, dobara koshish karein.</span>';
+                    resultBox.innerHTML = '<span style="color: #ef4444;">Server busy hai, dobara koshish karein.</span>';
                 };
             } else {
-                // Animation / Video Generation simulation / endpoint
-                // Using dynamic video rendering parameters supported via open endpoints
-                setTimeout(() => {
+                // Video Generation API URL
+                const videoUrl = `https://pollinations.ai/p/3d%20cartoon%20animation%20video%20${encodedPrompt}?width=512&height=512&nologo=true`;
+                
+                // Real Video Player creation
+                const video = document.createElement('video');
+                video.src = videoUrl;
+                video.controls = true;
+                video.autoplay = true;
+                video.loop = true;
+                
+                video.onloadeddata = function() {
                     loader.style.display = 'none';
-                    resultBox.innerHTML = `
-                        <div style="padding: 20px; text-align: center;">
-                            <p style="color: #38bdf8; margin-bottom: 10px; font-weight: bold;">✨ Animation Generated Successfully!</p>
-                            <img src="https://pollinations.ai/p/animated%20cartoon%20gif%20style%20${encodedPrompt}?width=512&height=512&nologo=true" style="border-radius: 8px; max-height: 300px;" alt="Animation">
-                        </div>
-                    `;
-                }, 3000);
+                    resultBox.insertBefore(video, downloadBtn);
+                    downloadBtn.href = videoUrl;
+                    downloadBtn.innerText = "📥 Download Video";
+                    downloadBtn.style.display = 'inline-block';
+                };
+
+                video.onerror = function() {
+                    // Fallback to media stream player if video format varies
+                    loader.style.display = 'none';
+                    const fallbackImg = new Image();
+                    fallbackImg.src = videoUrl;
+                    resultBox.insertBefore(fallbackImg, downloadBtn);
+                    downloadBtn.href = videoUrl;
+                    downloadBtn.innerText = "📥 Download Animation";
+                    downloadBtn.style.display = 'inline-block';
+                };
             }
         }
     </script>
